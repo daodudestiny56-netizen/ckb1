@@ -54,7 +54,7 @@ simple-lock/
 │   ├── build-contract.js       # Bundles TS to JS & compiles to QuickJS bytecode
 │   ├── build-all.js            # Compiles all contracts in /contracts
 │   └── deploy.js               # Deploys built bytecode to devnet/testnet/mainnet
-├── screenshots/                # Walkthrough & tutorial workflow screenshots
+├── screenshots/                # Comprehensive tutorial workflow screenshots (31 files)
 ├── tests/                      # Jest mock tests using ckb-testtool
 │   ├── hash-lock.mock.test.ts
 │   └── hash-lock-v2.mock.test.ts
@@ -163,9 +163,9 @@ git push https://github.com/daodudestiny56-netizen/ckb1.git HEAD:main --force
 
 ---
 
-## Available Screenshots
+## Complete Screenshots Gallery (31 Files)
 
-All project workflow screenshots are archived under [`screenshots/`](screenshots/):
+All project walkthrough and code execution screenshots are stored in [`screenshots/`](screenshots/):
 
 | File | Description |
 | :--- | :--- |
@@ -180,6 +180,26 @@ All project workflow screenshots are archived under [`screenshots/`](screenshots
 | [`09-deployment-success.png`](screenshots/09-deployment-success.png) | Deployment completion confirmation |
 | [`10-deploy-script-line-inspection.png`](screenshots/10-deploy-script-line-inspection.png) | Line-by-line deploy script output |
 | [`11-deployment-artifacts-saved.png`](screenshots/11-deployment-artifacts-saved.png) | Deployment artifacts saved to `deployment/` |
+| [`Screenshot (125).png`](screenshots/Screenshot%20(125).png) | Tutorial walkthrough screenshot 125 |
+| [`Screenshot (126).png`](screenshots/Screenshot%20(126).png) | Tutorial walkthrough screenshot 126 |
+| [`Screenshot (127).png`](screenshots/Screenshot%20(127).png) | Tutorial walkthrough screenshot 127 |
+| [`Screenshot (128).png`](screenshots/Screenshot%20(128).png) | Tutorial walkthrough screenshot 128 |
+| [`Screenshot (129).png`](screenshots/Screenshot%20(129).png) | Tutorial walkthrough screenshot 129 |
+| [`Screenshot (130).png`](screenshots/Screenshot%20(130).png) | Tutorial walkthrough screenshot 130 |
+| [`Screenshot (131).png`](screenshots/Screenshot%20(131).png) | Tutorial walkthrough screenshot 131 |
+| [`Screenshot (132).png`](screenshots/Screenshot%20(132).png) | Tutorial walkthrough screenshot 132 |
+| [`Screenshot (133).png`](screenshots/Screenshot%20(133).png) | Tutorial walkthrough screenshot 133 |
+| [`Screenshot (134).png`](screenshots/Screenshot%20(134).png) | Tutorial walkthrough screenshot 134 |
+| [`Screenshot (135).png`](screenshots/Screenshot%20(135).png) | Tutorial walkthrough screenshot 135 |
+| [`Screenshot (136).png`](screenshots/Screenshot%20(136).png) | Tutorial walkthrough screenshot 136 |
+| [`Screenshot (137).png`](screenshots/Screenshot%20(137).png) | Tutorial walkthrough screenshot 137 |
+| [`Screenshot (138).png`](screenshots/Screenshot%20(138).png) | Tutorial walkthrough screenshot 138 |
+| [`Screenshot (139).png`](screenshots/Screenshot%20(139).png) | Tutorial walkthrough screenshot 139 |
+| [`Screenshot (140).png`](screenshots/Screenshot%20(140).png) | Tutorial walkthrough screenshot 140 |
+| [`Screenshot (141).png`](screenshots/Screenshot%20(141).png) | Tutorial walkthrough screenshot 141 |
+| [`Screenshot (142).png`](screenshots/Screenshot%20(142).png) | Tutorial walkthrough screenshot 142 |
+| [`Screenshot (143).png`](screenshots/Screenshot%20(143).png) | Tutorial walkthrough screenshot 143 |
+| [`Screenshot (144).png`](screenshots/Screenshot%20(144).png) | Tutorial walkthrough screenshot 144 |
 
 ---
 
