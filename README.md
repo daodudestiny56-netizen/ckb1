@@ -29,7 +29,7 @@ This repository contains two smart contract implementations demonstrating progre
 
 Below is the Antigravity IDE workspace showing smart contract development with active CKB devnet node synchronization:
 
-![Antigravity IDE & Contract Code](examples/dApp/simple-lock/images/media__1785330292636.png)
+![Antigravity IDE & Contract Code](screenshots/01-ide-and-contract-code.png)
 
 ---
 
@@ -54,6 +54,7 @@ simple-lock/
 │   ├── build-contract.js       # Bundles TS to JS & compiles to QuickJS bytecode
 │   ├── build-all.js            # Compiles all contracts in /contracts
 │   └── deploy.js               # Deploys built bytecode to devnet/testnet/mainnet
+├── screenshots/                # Walkthrough & tutorial workflow screenshots
 ├── tests/                      # Jest mock tests using ckb-testtool
 │   ├── hash-lock.mock.test.ts
 │   └── hash-lock-v2.mock.test.ts
@@ -83,7 +84,7 @@ pnpm install
 
 The project uses ES2022 QuickJS support in `ckb-js-vm` and `tsconfig.base.json` for type safety:
 
-![TypeScript Configuration & Terminal](examples/dApp/simple-lock/images/media__17853302818.png)
+![TypeScript Configuration & Terminal](screenshots/02-typescript-config.png)
 
 ---
 
@@ -101,7 +102,7 @@ pnpm run build:contract hash-lock-v2
 
 **Build Output Verification**:
 
-![Contract Compilation & Bytecode Output](examples/dApp/simple-lock/images/media__1785330292924.png)
+![Contract Compilation & Bytecode Output](screenshots/03-contract-bytecode-build.png)
 
 ---
 
@@ -123,7 +124,7 @@ pnpm run build:contract hash-lock-v2
 
 ---
 
-### Step 5: Deploying Contracts to CKB Network
+### Step 5: Deploying Contracts & Execution
 
 Deploy contracts to `devnet`, `testnet`, or `mainnet` using `scripts/deploy.js`:
 
@@ -135,9 +136,11 @@ node scripts/deploy.js
 pnpm run deploy -- --network testnet --privkey 0x...
 ```
 
-**Deployment Diagnostics & Logs**:
+**Deployment Execution & Verification**:
 
-![Deploy Script & Runtime Diagnostics](examples/dApp/simple-lock/images/media__1785330293081.png)
+![Deployment Execution Success](screenshots/09-deployment-success.png)
+
+![Deployment Artifacts Saved](screenshots/11-deployment-artifacts-saved.png)
 
 ---
 
@@ -156,7 +159,27 @@ git push https://github.com/daodudestiny56-netizen/ckb1.git HEAD:main --force
 
 **Git Push Completion**:
 
-![Git Push & Deployment Verification](examples/dApp/simple-lock/images/media__1785330292994.png)
+![Git Push & Deployment Verification](screenshots/04-git-push-completion.png)
+
+---
+
+## Available Screenshots
+
+All project workflow screenshots are archived under [`screenshots/`](screenshots/):
+
+| File | Description |
+| :--- | :--- |
+| [`01-ide-and-contract-code.png`](screenshots/01-ide-and-contract-code.png) | Antigravity IDE editing `hash-lock-v2.ts` with CKB node logs |
+| [`02-typescript-config.png`](screenshots/02-typescript-config.png) | `tsconfig.base.json` and terminal workspace |
+| [`03-contract-bytecode-build.png`](screenshots/03-contract-bytecode-build.png) | Bytecode compilation output (`hash-lock-v2.bc`) |
+| [`04-git-push-completion.png`](screenshots/04-git-push-completion.png) | Git push completion output to GitHub |
+| [`05-deploy-script-diagnostics.png`](screenshots/05-deploy-script-diagnostics.png) | Deploy script terminal diagnostics |
+| [`06-github-repo-readme.png`](screenshots/06-github-repo-readme.png) | GitHub repository home page |
+| [`07-terminal-git-diff.png`](screenshots/07-terminal-git-diff.png) | Terminal git diff inspection |
+| [`08-deploy-script-source-tail.png`](screenshots/08-deploy-script-source-tail.png) | `scripts/deploy.js` source inspection |
+| [`09-deployment-success.png`](screenshots/09-deployment-success.png) | Deployment completion confirmation |
+| [`10-deploy-script-line-inspection.png`](screenshots/10-deploy-script-line-inspection.png) | Line-by-line deploy script output |
+| [`11-deployment-artifacts-saved.png`](screenshots/11-deployment-artifacts-saved.png) | Deployment artifacts saved to `deployment/` |
 
 ---
 
