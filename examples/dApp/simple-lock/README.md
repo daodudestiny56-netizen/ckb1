@@ -4,7 +4,7 @@ Welcome to the **CKB JavaScript VM (`ckb-js-vm`) Smart Contract Tutorial**! This
 
 ---
 
-## 📌 Overview & Architecture
+## Overview & Architecture
 
 This repository contains two smart contract implementations demonstrating progressive security patterns on CKB:
 
@@ -25,7 +25,7 @@ This repository contains two smart contract implementations demonstrating progre
 
 ---
 
-## 🖼️ Developer Workspace & IDE Overview
+## Developer Workspace & IDE Overview
 
 Below is the Antigravity IDE workspace showing smart contract development with active CKB devnet node synchronization:
 
@@ -33,7 +33,7 @@ Below is the Antigravity IDE workspace showing smart contract development with a
 
 ---
 
-## 📁 Project Directory Structure
+## Project Directory Structure
 
 ```text
 simple-lock/
@@ -62,7 +62,7 @@ simple-lock/
 
 ---
 
-## 🚀 Step-by-Step Tutorial Guide
+## Step-by-Step Tutorial Guide
 
 ### Step 1: Prerequisites & Installation
 
@@ -160,7 +160,7 @@ git push https://github.com/daodudestiny56-netizen/ckb1.git HEAD:main --force
 
 ---
 
-## 📜 Available NPM / PNPM Commands
+## Available NPM / PNPM Commands
 
 | Command | Description |
 | :--- | :--- |
@@ -173,7 +173,7 @@ git push https://github.com/daodudestiny56-netizen/ckb1.git HEAD:main --force
 
 ---
 
-## 📚 Key Learning Takeaways
+## Key Learning Takeaways
 
 1. **Cell Model Security**: In UTXO / Cell blockchains like CKB, exposing an unsalted preimage on-chain allows front-runners to copy the preimage and spend the cell first. Adding a cell-specific `nonce` prevents preimage reuse across cells.
 2. **Double-Authentication Pattern**: Combining `pubkey_hash` signature verification with `preimage` validation creates robust multi-factor locks for CKB dApps.
@@ -181,6 +181,6 @@ git push https://github.com/daodudestiny56-netizen/ckb1.git HEAD:main --force
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the [MIT License](LICENSE).
