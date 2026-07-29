@@ -1,9 +1,9 @@
 [[cells]]
-name = "hash-lock.bc"
+name = "hash-lock-v2.bc"
 enable_type_id = false
 
   [cells.location]
-  file = "C:\\Users\\USER\\Desktop\\ckb\\docs.nervos.org\\examples\\dApp\\simple-lock\\dist\\hash-lock.bc"
+  file = "C:\\Users\\USER\\Desktop\\ckb\\docs.nervos.org\\examples\\dApp\\simple-lock\\dist\\hash-lock-v2.bc"
 
 [lock]
 code_hash = "0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8"
