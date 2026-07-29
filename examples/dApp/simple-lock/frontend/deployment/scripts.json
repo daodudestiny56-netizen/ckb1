@@ -1,13 +1,28 @@
 {
   "devnet": {
-    "hash-lock.bc": {
-      "codeHash": "0xcd262cb39d9e83f63e5415a56a23982fb6ae79b993e3cf371c12fad71dd23519",
-      "hashType": "data1",
+    "hash-lock-v2.bc": {
+      "codeHash": "0x2ad89d90113c736a78df035e4ce4a44f6bc29f2d2fa7e8a3ab488fd823a0a8e9",
+      "hashType": "data2",
       "cellDeps": [
         {
           "cellDep": {
             "outPoint": {
-              "txHash": "0x4309def4700f30d10cd1a08c74a1e84ddf49394036556350742a337f801570ff",
+              "txHash": "0x0aef0052b4e415db1c4341fb76cd071b94842e62fb42a03871a612b785d5a3ee",
+              "index": 0
+            },
+            "depType": "code"
+          }
+        }
+      ]
+    },
+    "hash-lock.bc": {
+      "codeHash": "0xcd262cb39d9e83f63e5415a56a23982fb6ae79b993e3cf371c12fad71dd23519",
+      "hashType": "data2",
+      "cellDeps": [
+        {
+          "cellDep": {
+            "outPoint": {
+              "txHash": "0x8176c11ad1acab31e87e0ad581c4f4d4dba4ff76b302ea55f4c1e0f0298948db",
               "index": 0
             },
             "depType": "code"

@@ -1,0 +1,1 @@
+{"id": 1, "jsonrpc": "2.0", "method": "get_cells", "params": [{"script": {"code_hash": "0xac4db0d0c028ba0d73dec9ee5e6a3c0c98fcdfca895402a3285d680e964dcb46", "hash_type": "type", "args": "0x0000cd262cb39d9e83f63e5415a56a23982fb6ae79b993e3cf371c12fad71dd2351902106911e4f83e790e1eb2f39bdff23c1db43ed5af9219f763e571389af21259ca"}, "script_type": "lock"}, "asc", "0x64"]}

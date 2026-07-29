@@ -49,7 +49,9 @@ simple-lock/
 │   └── app/
 │       ├── ccc-client.ts       # CKB CCC client initializer
 │       ├── hash-lock.ts        # Frontend helper for v1
-│       └── hash-lock-v2.ts     # Frontend helper for v2 (Salted lock & signature)
+│       ├── hash-lock-v2.ts     # Frontend helper for v2 (Salted lock & signature)
+│       └── hash-lock-v2/       # Next.js page route for Hash-Lock V2 UI
+│           └── page.tsx
 ├── scripts/                    # Build, add-contract, and deploy tooling
 │   ├── build-contract.js       # Bundles TS to JS & compiles to QuickJS bytecode
 │   ├── build-all.js            # Compiles all contracts in /contracts
