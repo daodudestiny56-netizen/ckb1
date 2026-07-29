@@ -1,178 +1,186 @@
-# Nervos CKB Documentation Website
+# CKB Smart Contract Tutorial: Simple Lock & Hash-Lock v2
 
-- [Nervos CKB Documentation Website](#nervos-ckb-documentation-website)
-  - [What is CKB](#what-is-ckb)
-  - [Contributing](#contributing)
-    - [Branches](#branches)
-    - [Code structure](#code-structure)
-    - [Develop](#develop)
-      - [Clone the Repo](#clone-the-repo)
-      - [Install Dependencies](#install-dependencies)
-      - [Run the website](#run-the-website)
-      - [Build for deployment](#build-for-deployment)
-      - [Maintain key-terms.json file](#maintain-key-termsjson-file)
-    - [Broken Link Checker](#broken-link-checker)
+Welcome to the **CKB JavaScript VM (`ckb-js-vm`) Smart Contract Tutorial**! This project is a full-stack dApp built on the [Nervos CKB (Common Knowledge Base)](https://nervos.org) blockchain, demonstrating how to write, build, test, deploy, and interact with JavaScript/TypeScript smart contracts.
 
-## What is CKB
+---
 
-Nervos CKB is a public permissionless blockchain and the layer 1 of Nervos.
+## Overview & Architecture
 
-CKB generates trust and extends this trust to upper layers, making Nervos a trust network. It's also the value store of the Nervos network, providing public, secure and censorship-resistant custody services for assets, identities and other common knowledge created in the network. We will also vigorously develop the developer community and aim to offer blockchain developers exciting new capabilities.
+This repository contains two smart contract implementations demonstrating progressive security patterns on CKB:
 
-If you run into an issue on our documentation website you can contact us on [Nervos talk](https://talk.nervos.org/) or [Discord](https://discord.gg/AqGTUE9).
+### 1. Basic Hash-Lock (`v1`)
+- **Location**: [`examples/dApp/simple-lock/contracts/hash-lock/src/index.ts`](examples/dApp/simple-lock/contracts/hash-lock/src/index.ts)
+- **Mechanism**: Unlocks a cell by providing a secret `preimage` in `WitnessArgs` whose hash matches the `expect_hash` stored in the script arguments (`expect_hash = hashCkb(preimage)`).
 
-## Contributing
+### 2. Enhanced Security Hash-Lock (`v2`)
+- **Location**: [`examples/dApp/simple-lock/contracts/hash-lock-v2/src/index.ts`](examples/dApp/simple-lock/contracts/hash-lock-v2/src/index.ts)
+- **Frontend**: [`examples/dApp/simple-lock/frontend/app/hash-lock-v2.ts`](examples/dApp/simple-lock/frontend/app/hash-lock-v2.ts)
+- **Security Enhancements**:
+  1. **Signature-Based Authentication**:
+     - Stores a 20-byte `pubkey_hash` in script args alongside the commitment.
+     - Requires a valid **secp256k1 signature** over the transaction `sighash_all` in the witness, verified against `pubkey_hash`.
+  2. **Salted Per-Cell Preimage Commitment**:
+     - Fixes preimage reuse across cells by requiring `expect_hash = hashCkb(preimage, nonce)`.
+     - Embedded 32-byte `nonce` ensures each locked cell requires a unique, salted hash commitment.
 
-### Branches
+---
 
-- production branch: [master](https://github.com/nervosnetwork/docs.nervos.org/tree/master)
-- latest developing branch: [develop](https://github.com/nervosnetwork/docs.nervos.org/tree/develop)
-  - Live Preview: [https://nervos-ckb-docs-git-develop-cryptape.vercel.app/](https://nervos-ckb-docs-git-develop-cryptape.vercel.app/)
+## Developer Workspace & IDE Overview
 
-### Code structure
+Below is the Antigravity IDE workspace showing smart contract development with active CKB devnet node synchronization:
 
-- `website`: The doc site is built with [docusaurus](https://docusaurus.io/) and under the `website` folder.
-- `examples`: The `examples` folder contains full tutorial codes you can clone.
+![Antigravity IDE & Contract Code](examples/dApp/simple-lock/images/media__1785330292636.png)
 
-### Release
+---
 
-Production release should be on the master branch.
+## Project Directory Structure
 
-Please follow the steps below:
+```text
+simple-lock/
+├── contracts/                  # CKB Smart Contracts (TypeScript)
+│   ├── hash-lock/              # Original Hash-Lock v1
+│   │   └── src/index.ts
+│   └── hash-lock-v2/           # Enhanced Hash-Lock v2 (Secp256k1 + Salted Nonce)
+│       └── src/index.ts
+├── dist/                       # Output build directory (.js bundles & .bc bytecodes)
+│   ├── hash-lock-v2.js
+│   └── hash-lock-v2.bc
+├── frontend/                   # Next.js web application & CCC integration
+│   └── app/
+│       ├── ccc-client.ts       # CKB CCC client initializer
+│       ├── hash-lock.ts        # Frontend helper for v1
+│       └── hash-lock-v2.ts     # Frontend helper for v2 (Salted lock & signature)
+├── scripts/                    # Build, add-contract, and deploy tooling
+│   ├── build-contract.js       # Bundles TS to JS & compiles to QuickJS bytecode
+│   ├── build-all.js            # Compiles all contracts in /contracts
+│   └── deploy.js               # Deploys built bytecode to devnet/testnet/mainnet
+├── tests/                      # Jest mock tests using ckb-testtool
+│   ├── hash-lock.mock.test.ts
+│   └── hash-lock-v2.mock.test.ts
+└── pnpm-workspace.yaml         # PNPM workspace configuration
+```
 
-1. Create a new PR that bumps the version in the `package.json` under `/website`
-2. Merge the PR on `develop` branch
-3. Create a new PR from `develop` that targeting on the `master` branch
-4. Obtain at least one approval before merging the PR into `master` branch
-5. Merge the PR into `master` branch using **regular merge only**; squash merge and rebase merge are not allowed
-6. Create a new tag and release on github targeting on the master branch
-7. The release content should include description of changes following 3 sections:
-   - New Content
-   - Fixes
-   - Others
-8. Example release content: https://github.com/nervosnetwork/docs.nervos.org/releases/tag/v2.35.0 
+---
 
-### Develop
+## Step-by-Step Tutorial Guide
 
-#### Clone the Repo
+### Step 1: Prerequisites & Installation
+
+Ensure you have **Node.js** (v18+) and **pnpm** installed.
 
 ```bash
-git clone https://github.com/nervosnetwork/docs.nervos.org.git
-cd docs.nervos.org
-cd website
+# Clone the repository
+git clone https://github.com/daodudestiny56-netizen/ckb1.git
+cd ckb1/examples/dApp/simple-lock
+
+# Install dependencies
+pnpm install
 ```
 
-#### Install Dependencies
+---
 
-Install [yarn](https://yarnpkg.com/en/).
+### Step 2: TypeScript & Project Configuration
 
-In `website` folder:
+The project uses ES2022 QuickJS support in `ckb-js-vm` and `tsconfig.base.json` for type safety:
+
+![TypeScript Configuration & Terminal](examples/dApp/simple-lock/images/media__17853302818.png)
+
+---
+
+### Step 3: Compiling Smart Contracts to Bytecode
+
+Contracts are bundled with `esbuild` into JavaScript and then compiled into CKB QuickJS bytecode (`.bc`) using the CKB debugger engine:
 
 ```bash
-yarn install
+# Build all contracts
+pnpm run build
+
+# Or build a specific contract
+pnpm run build:contract hash-lock-v2
 ```
 
-#### Run the website
+**Build Output Verification**:
 
-In `website` folder:
+![Contract Compilation & Bytecode Output](examples/dApp/simple-lock/images/media__1785330292924.png)
+
+---
+
+### Step 4: Contract Logic Walkthrough (`hash-lock-v2`)
+
+#### Script Args Layout (119 Bytes)
+| Offset (Bytes) | Size | Description |
+| :--- | :--- | :--- |
+| `0..2` | 2 B | `0x0000` (`ckb_js_vm` header prefix) |
+| `2..34` | 32 B | `codeHash` of `hash-lock-v2.bc` |
+| `34..35` | 1 B | `hashType` of `hash-lock-v2.bc` |
+| `35..55` | 20 B | `pubkey_hash` (blake160 hash of owner's compressed secp256k1 public key) |
+| `55..87` | 32 B | `expect_hash` (`hashCkb(preimage, nonce)`) |
+| `87..119` | 32 B | `nonce` (32-byte cell-specific salt) |
+
+#### Witness Lock Layout
+- `0..65` (65 Bytes): secp256k1 signature (`r` [32b], `s` [32b], `recovery` [1b]) over transaction `sighash_all`.
+- `65+` (Variable): Secret `preimage` string bytes.
+
+---
+
+### Step 5: Deploying Contracts to CKB Network
+
+Deploy contracts to `devnet`, `testnet`, or `mainnet` using `scripts/deploy.js`:
 
 ```bash
-yarn start
+# Deploy to local devnet
+node scripts/deploy.js
+
+# Deploy to testnet with custom private key
+pnpm run deploy -- --network testnet --privkey 0x...
 ```
+
+**Deployment Diagnostics & Logs**:
+
+![Deploy Script & Runtime Diagnostics](examples/dApp/simple-lock/images/media__1785330293081.png)
+
+---
+
+### Step 6: Version Control & GitHub Synchronization
+
+Once contract modifications are complete and verified, push your updates to your GitHub repository:
 
 ```bash
-[INFO] Starting the development server...
-[SUCCESS] Docusaurus website is running at: http://localhost:3000/
+# Stage and commit changes
+git add .
+git commit -m "feat: add hash-lock-v2 contract with secp256k1 signature authentication and salted preimage commitments"
+
+# Push to remote repository
+git push https://github.com/daodudestiny56-netizen/ckb1.git HEAD:main --force
 ```
 
-You can check out the website at http://localhost:3000/ in your browser now.
+**Git Push Completion**:
 
-#### Build for deployment
+![Git Push & Deployment Verification](examples/dApp/simple-lock/images/media__1785330292994.png)
 
-In `website` folder:
+---
 
-```bash
-yarn build
-```
+## Available NPM / PNPM Commands
 
-#### Maintain key-terms.json file
-The `key-terms.json` file is generated from the glossary in the `docs/tech-explanation/glossary.md` file. This file is used by the Tooltip component to provide definitions and links to key terms throughout the documentation.
+| Command | Description |
+| :--- | :--- |
+| `pnpm run build` | Compiles all contracts in `contracts/` to `dist/` |
+| `pnpm run build:contract <name>` | Compiles a single contract by name |
+| `pnpm test` | Runs Jest mock tests via `ckb-testtool` |
+| `pnpm run add-contract <name>` | Scaffolds a new contract directory & test file |
+| `pnpm run deploy` | Deploys built `.bc` files using `offckb` |
+| `pnpm run format` | Formats code with Prettier |
 
-Once you have updates in `glossary.md`, please remember to run the following command in the `website` folder to re-generate the `key-terms.json` file:
+---
 
-```bash
-yarn gen-terms
-```
+## Key Learning Takeaways
 
-After running the command, you can navigate to `src/components/Tooltip` to verify that the `key-terms.json` file has been generated successfully.
+1. **Cell Model Security**: In UTXO / Cell blockchains like CKB, exposing an unsalted preimage on-chain allows front-runners to copy the preimage and spend the cell first. Adding a cell-specific `nonce` prevents preimage reuse across cells.
+2. **Double-Authentication Pattern**: Combining `pubkey_hash` signature verification with `preimage` validation creates robust multi-factor locks for CKB dApps.
+3. **JavaScript VM Flexibility**: `ckb-js-vm` allows developers to leverage standard TypeScript libraries (`@ckb-js-std/core`, `@noble/curves`, `@ckb-ccc/core`) directly on the CKB Layer-1 blockchain.
 
-###  Broken Link Checker
+---
 
-The link checker scans for dead links and maintains a collaborative dead link registry.
+## License
 
-**Quick Start**
-
-1. Install [lychee](https://github.com/lycheeverse/lychee).
-2. Build the website: `cd website && yarn build`.
-3. Run the check: `cd website && yarn link:check`.
-4. Review results: `cd website && yarn link:report`.
-
-**Environment Variables**
-
-Customize the check behavior with these optional environment variables:
-
-- `GITHUB_TOKEN`: GitHub API token to increase rate limits
-- `LINK_CHECK_CONCURRENCY`: Number of concurrent requests (default: 1)
-- `LINK_CHECK_TIMEOUT`: Request timeout in seconds (default: 30)
-- `LINK_CHECK_RETRIES`: Number of retries per URL (default: 2)
-- `LINK_CHECK_ACCEPT`: Acceptable HTTP status codes (default: "200..=299,403")
-
-Example: `GITHUB_TOKEN=your_token LINK_CHECK_CONCURRENCY=2 yarn link:check`
-
-**Report Files**
-
-All reports are stored in `website/reports/link-check/`:
-
-- `summary.json`: Run statistics and metrics
-- `dead-links.json`: All currently failing links with metadata
-- `new-failures.json`: Links that failed but aren't in the baseline
-- `recovered.json`: Previously failing links that now work
-- `unresolved-known.json`: Known issues that still fail
-- `known-failures.json`: Baseline of accepted failures (manual maintenance)
-- `history.jsonl`: Historical run data
-- `report.md`: Human-readable summary report
-
-**Workflow**
-
-1. **Run Check**: Execute `yarn link:check` to scan all links
-2. **Review Report**: Check `report.md` for new failures and recoveries
-3. **Take Action**:
-   - Fix broken links in documentation
-   - For unfixable external links, add to `known-failures.json` with reason
-   - Remove recovered links from `known-failures.json`
-4. **Commit Changes**: Include report updates and documentation fixes
-
-**Baseline Management**
-
-The `known-failures.json` file contains links that are expected to fail. Each entry should have:
-
-```json
-{
-  "url": "https://example.com/broken",
-  "expectedStatus": 404,
-  "reason": "External service discontinued",
-  "owner": "team-member",
-  "addedAt": "2024-01-01T00:00:00.000Z"
-}
-```
-
-**Only add links to baseline if:**
-- The link points to an external service you don't control
-- The failure is permanent (not temporary network issues)
-- You've confirmed the link is truly broken
-
-**Notes**
-
-* A cache file `./website/.lycheecache` will be created. For local development, the cache TTL is 30 days; you can change `max_cache_age` in `website/.lychee.toml`.
-* Because the docs contain many GitHub links, requests are routed via `api.github.com`. Providing a GitHub token increases the rate limit.
-* The check is designed for local/manual execution; CI integration is not currently implemented.
+This project is licensed under the [MIT License](LICENSE).
