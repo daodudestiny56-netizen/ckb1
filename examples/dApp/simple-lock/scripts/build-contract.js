@@ -3,6 +3,22 @@
 import { execSync } from "child_process";
 import path from "path";
 import fs from "fs";
+import { createRequire } from "module";
+
+const require = createRequire(import.meta.url);
+
+function getOffckbCliPath() {
+  try {
+    return require.resolve("@offckb/cli/build/index.js");
+  } catch {
+    const globalAppData = process.env.APPDATA;
+    if (globalAppData) {
+      const fallback = path.join(globalAppData, "npm", "node_modules", "@offckb", "cli", "build", "index.js");
+      if (fs.existsSync(fallback)) return fallback;
+    }
+  }
+  return null;
+}
 
 function buildContract(contractName) {
   if (!contractName) {
@@ -39,8 +55,9 @@ function buildContract(contractName) {
   // Ensure global dist directory exists
   fs.mkdirSync(distDir, { recursive: true });
 
-  const outputJsFile = path.join(distDir, `${contractName}.js`);
-  const outputBcFile = path.join(distDir, `${contractName}.bc`);
+  const outputJsFile = path.join(distDir, `${contractName}.js`).replace(/\\/g, '/');
+  const outputBcFile = path.join(distDir, `${contractName}.bc`).replace(/\\/g, '/');
+  const binFile = "node_modules/ckb-testtool/src/unittest/defaultScript/ckb-js-vm";
 
   console.log(`Building ${contractName} from ${srcFile}...`);
 
@@ -51,10 +68,12 @@ function buildContract(contractName) {
     //   execSync(`./node_modules/.bin/tsc --noEmit --project .`, { stdio: 'pipe' });
     // }
 
-    // Step 2: Bundle with esbuild
-    console.log("  📦 Bundling with esbuild...");
+    const esbuildBin = process.platform === "win32"
+      ? path.join("node_modules", ".bin", "esbuild.cmd")
+      : "./node_modules/.bin/esbuild";
+
     const esbuildCmd = [
-      "./node_modules/.bin/esbuild",
+      `"${esbuildBin}"`,
       "--platform=neutral",
       "--minify",
       "--bundle",
@@ -66,16 +85,41 @@ function buildContract(contractName) {
 
     execSync(esbuildCmd, { stdio: "pipe" });
 
-    // Step 3: Compile to bytecode with ckb-debugger
+    // Step 3: Compile to bytecode with ckb-debugger or offckb debugger
     console.log("  🔧 Compiling to bytecode...");
-    const debuggerCmd = [
-      "ckb-debugger",
-      `--read-file ${outputJsFile}`,
-      "--bin node_modules/ckb-testtool/src/unittest/defaultScript/ckb-js-vm",
-      "--",
-      "-c",
-      outputBcFile,
-    ].join(" ");
+    let debuggerCmd;
+    try {
+      execSync("ckb-debugger --version", { stdio: "ignore" });
+      debuggerCmd = [
+        "ckb-debugger",
+        `--read-file ${outputJsFile}`,
+        `--bin ${binFile}`,
+        "--",
+        "-c",
+        outputBcFile,
+      ].join(" ");
+    } catch {
+      const offckbCliPath = getOffckbCliPath();
+      if (offckbCliPath) {
+        debuggerCmd = [
+          `node "${offckbCliPath}" debugger`,
+          `--read-file ${outputJsFile}`,
+          `--bin ${binFile}`,
+          "--",
+          "-c",
+          outputBcFile,
+        ].join(" ");
+      } else {
+        debuggerCmd = [
+          "offckb debugger --",
+          `--read-file ${outputJsFile}`,
+          `--bin ${binFile}`,
+          "--",
+          "-c",
+          outputBcFile,
+        ].join(" ");
+      }
+    }
 
     execSync(debuggerCmd, { stdio: "pipe" });
 

@@ -28,6 +28,7 @@
     "typescript": "~5.8.2",
     "ts-jest": "~29.2.6",
     "@types/node": "~22.13.8",
-    "@types/jest": "~29.5.14"
+    "@types/jest": "~29.5.14",
+    "@noble/curves": "^1.4.0"
   }
 }

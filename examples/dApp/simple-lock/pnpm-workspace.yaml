@@ -1,2 +1,7 @@
 packages:
   - "frontend"
+allowBuilds:
+  esbuild: true
+  secp256k1: true
+  sharp: true
+  unrs-resolver: true
