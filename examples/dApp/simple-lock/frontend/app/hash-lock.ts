@@ -67,13 +67,13 @@ export async function unlock(
   });
 
   // CCC transactions are easy to be edited
-  tx.outputs.forEach((output, i) => {
+  for (let i = 0; i < tx.outputs.length; i++) {
+    const output = tx.outputs[i];
     if (output.capacity > ccc.fixedPointFrom(amountInCKB)) {
-      alert(`Insufficient capacity at output ${i} to store data`);
-      return;
+      throw new Error(`Insufficient capacity at output ${i} to store data`);
     }
     output.capacity = ccc.fixedPointFrom(amountInCKB);
-  });
+  }
 
   // Complete missing parts for transaction
   await tx.addCellDeps(myScripts["hash-lock.bc"]!.cellDeps[0].cellDep);
