@@ -145,13 +145,13 @@ export async function unlockV2({
     outputsData: [],
   });
 
-  tx.outputs.forEach((output, i) => {
+  for (let i = 0; i < tx.outputs.length; i++) {
+    const output = tx.outputs[i];
     if (output.capacity > ccc.fixedPointFrom(amountInCKB)) {
-      alert(`Insufficient capacity at output ${i} to store data`);
-      return;
+      throw new Error(`Insufficient capacity at output ${i} to store data`);
     }
     output.capacity = ccc.fixedPointFrom(amountInCKB);
-  });
+  }
 
   // Add cell deps
   await tx.addCellDeps(myScripts["hash-lock-v2.bc"]!.cellDeps[0].cellDep);
