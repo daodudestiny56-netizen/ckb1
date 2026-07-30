@@ -92,7 +92,15 @@ export async function unlock(
     readSigner,
     ccc.fixedPointFrom(occupiedSize),
   );
-  await tx.completeFeeBy(readSigner);
+  const balanceDiff =
+    (await tx.getInputsCapacity(cccClient)) - tx.getOutputsCapacity();
+  console.log("balanceDiff: ", balanceDiff);
+  if (balanceDiff > ccc.Zero) {
+    tx.addOutput({
+      lock: fromScript,
+      capacity: balanceDiff - BigInt(1000), // Fee 1000
+    });
+  }
 
   // fill the witness with preimage
   const preimageAnswer = window.prompt("please enter the preimage: ");
