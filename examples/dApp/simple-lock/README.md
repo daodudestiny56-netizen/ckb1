@@ -177,15 +177,72 @@ All project walkthrough and code execution screenshots are stored in [`screensho
 
 | Deliverable | Status |
 |---|---|
-| Custom lock script deployed | ✅ `hash-lock` and `hash-lock-v2`, both confirmed on-chain |
-| dApp frontend deployed | ✅ Both contracts have working, tested transfer/unlock UIs |
-| Security weaknesses identified | ✅ No spender authentication; preimage reuse across cells |
-| Security weaknesses addressed | ✅ secp256k1 signature auth; salted per-cell hash commitment |
-| Fixes verified on-chain | ✅ Real transactions, confirmed via balance changes |
-| Additional bugs found & fixed | ✅ 4 fixed, 1 attempted/reverted with documented cause, 4 identified and documented |
+| Custom lock script deployed | Done -- `hash-lock` and `hash-lock-v2`, both confirmed on-chain |
+| dApp frontend deployed | Done -- Both contracts have working, tested transfer/unlock UIs |
+| Security weaknesses identified | Done -- No spender authentication; preimage reuse across cells |
+| Security weaknesses addressed | Done -- secp256k1 signature auth; salted per-cell hash commitment |
+| Fixes verified on-chain | Done -- Real transactions, confirmed via balance changes |
+| Additional bugs found & fixed | Done -- 4 fixed, 1 attempted/reverted with documented cause, 4 identified and documented |
+| CKB Devnet Wallet dApp | Done -- Full-featured wallet at `/wallet` route with send, receive, history, dark mode |
 
 ---
 
-## 9. License
+## 9. CKB Devnet Wallet dApp
+
+A polished, card-based CKB wallet built as a new Next.js route at `frontend/app/wallet/`.
+
+### Features
+
+| Feature | Description |
+|---|---|
+| Import Wallet | Enter a private key (hex) to derive address, pubkey hash, and balance. Key stored in-memory only (never localStorage). |
+| Generate Wallet | Create a random keypair client-side via `crypto.getRandomValues` |
+| Dashboard | Live CKB balance with auto-refresh every 10 seconds, truncated address with copy-to-clipboard |
+| Send CKB | Recipient address with async validation, amount with min 61 CKB enforcement, optional fee override, confirmation step before signing, post-send tx hash with status polling |
+| Receive | Address displayed as text with copy button and QR code (via qrcode.react) |
+| Transaction History | Last 10 transactions via CKB indexer `findTransactionsByLock`, showing direction (sent/received/self), block number, and status |
+| Dark Mode | Toggle with localStorage persistence, scoped to wallet route |
+| Toast Notifications | Custom toast system replacing `alert()` -- success, error, info types with auto-dismiss |
+| Loading Skeletons | Shimmer animations while balance and history load |
+| Devnet Warning | Dismissible banner warning this is a test-funds-only tool |
+| Responsive | Works down to 320px mobile width |
+
+### Architecture
+
+Uses the standard `secp256k1_blake160_sighash_all` lock script (CKB's default lock), not a custom JS-VM lock. CCC's built-in `SignerCkbPrivateKey` handles signing natively -- no manual sighash computation needed (unlike hash-lock-v2).
+
+**Fee strategy**: Uses the same hardcoded 1000 shannons (0.00001 CKB) fee proven working in `hash-lock.ts`. Does NOT use `completeFeeBy()` which crashes on Devnet due to null fee rate statistics.
+
+### File Layout
+
+| File | Purpose |
+|---|---|
+| `frontend/app/wallet/page.tsx` | Main page component -- import view, dashboard, send/receive/history tabs |
+| `frontend/app/wallet/wallet-utils.ts` | All CKB-specific logic -- key derivation, balance, send, history, formatting |
+| `frontend/app/wallet/components/Toast.tsx` | Toast notification system (context + provider) |
+| `frontend/app/wallet/components/Skeleton.tsx` | Loading skeleton components |
+| `frontend/app/wallet/components/CopyButton.tsx` | Click-to-copy with checkmark feedback |
+| `frontend/app/wallet/components/HashDisplay.tsx` | Truncated hash/address with expand and copy |
+| `frontend/app/wallet/components/DevnetWarning.tsx` | Devnet safety warning banner |
+
+### Dependencies Added
+
+| Package | Version | Purpose |
+|---|---|---|
+| `lucide-react` | ^1.28.0 | Icon set (send, receive, history, dark mode toggle, etc.) |
+| `qrcode.react` | ^4.2.0 | QR code generation for the Receive tab |
+
+### Running
+
+```bash
+cd examples/dApp/simple-lock/frontend
+pnpm install
+pnpm run dev
+# Navigate to http://localhost:3000/wallet
+```
+
+---
+
+## 10. License
 
 This project is licensed under the [MIT License](LICENSE).
